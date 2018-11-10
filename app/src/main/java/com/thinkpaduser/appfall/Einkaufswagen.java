@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,7 +46,7 @@ private ListView einkauf;
 private ListAdapter mAdapter;
 
 
-    Query ref = FirebaseDatabase.getInstance().getReference().child("list");
+    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("list");
 
 
 
@@ -65,12 +66,14 @@ View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
                 final EditText etname = (EditText) view.findViewById(R.id.etproduktname);
                 final EditText etmenge = (EditText) view.findViewById(R.id.etmenge);
 
+
                 builder.setTitle("Hinzufügen")
                         .setView(view)
                         .setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+ref.child(etname.getText().toString()).setValue(new Eintrag(etname.getText().toString(),Long.valueOf(etmenge.getText().toString())));
 
 
 
@@ -91,6 +94,11 @@ View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
     });
         listview();
 }
+    public void restartApp (){
+        Intent i = new Intent(getApplicationContext(), Einkaufswagen.class);
+        startActivity(i);
+        finish();}
+
 private void listview(){
 
     Log.d("list", "hallo");
@@ -173,6 +181,13 @@ mAdapter = new ListAdapter();
             return convertView;
         }
     }
-
+public class Eintrag{
+        public String Name;
+        public Long Menge;
+        public Eintrag(String name, Long menge){
+            this.Name = name;
+            this.Menge = menge;
+        }
+}
 }
 
