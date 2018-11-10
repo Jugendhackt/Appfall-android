@@ -138,6 +138,7 @@ public class Einkaufswagen extends AppCompatActivity {
                 beendet.setEnabled(false);
                 einkaufen.setText("Einkaufen");
                 ein.setValue(0);
+                ref.removeValue();
             }
         });
         //addItem.setOnClickListener(
