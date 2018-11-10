@@ -28,13 +28,15 @@ private FloatingActionButton addItem;
 View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
                 final EditText etname = (EditText) view.findViewById(R.id.etproduktname);
                 EditText etmenge = (EditText) view.findViewById(R.id.etmenge);
-                etmenge
+
                 builder.setTitle("Hinzufügen")
                         .setView(view)
                         .setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("list").child(etname);
+DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("list");
+
+
 
                             }
                         })
