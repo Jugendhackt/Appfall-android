@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,13 +42,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Einkaufswagen extends AppCompatActivity {
-private FloatingActionButton addItem;
-private ListView einkauf;
-private ListAdapter mAdapter;
+    private FloatingActionButton addItem;
+    private ListView einkauf;
+    private ListAdapter mAdapter;
+    private Button einkaufen;
+    private Button beendet;
 
 
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("list");
-
+    DatabaseReference ein = FirebaseDatabase.getInstance().getReference().child("einkaufen");
 
 
     @Override
@@ -55,59 +58,97 @@ private ListAdapter mAdapter;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_einkaufswagen);
 
+
+        einkaufen = (Button) findViewById(R.id.btnEinkaufen);
         addItem = (FloatingActionButton) findViewById(R.id.btnadditem);
         einkauf = (ListView) findViewById(R.id.lvEinkauf);
+        beendet = (Button) findViewById(R.id.btnBeendet);
+        beendet.setEnabled(false);
+        ein.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (((Long) dataSnapshot.getValue()) == 1) {
+                    addItem.setEnabled(false);
+                    einkaufen.setText("gerade einkaufen");
+                } else {
+                    if (((Long) dataSnapshot.getValue()) == 0){
+                    addItem.setEnabled(true);
+                    einkaufen.setText("Einkaufen");}
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        einkaufen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                beendet.setEnabled(true);
+                einkaufen.setEnabled(false);
+
+                ein.setValue(1);
+
+            }
+        });
+        beendet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                einkaufen.setEnabled(true);
+                beendet.setEnabled(false);
+                einkaufen.setText("Einkaufen");
+                ein.setValue(0);
+            }
+        });
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Einkaufswagen.this);
                 LayoutInflater inflater = getLayoutInflater();
-View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
+                View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
                 final EditText etname = (EditText) view.findViewById(R.id.etproduktname);
                 final EditText etmenge = (EditText) view.findViewById(R.id.etmenge);
 
 
                 builder.setTitle("Hinzufügen")
                         .setView(view)
-                        .setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
+                        . setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-ref.child(etname.getText().toString()).setValue(new Eintrag(etname.getText().toString(),Long.valueOf(etmenge.getText().toString())));
-
-
-
-
-
+                                ref.child(etname.getText().toString()).setValue(new Eintrag(etname.getText().toString(), Long.valueOf(etmenge.getText().toString())));
 
 
                             }
                         })
                         .setCancelable(true);
 
-               AlertDialog alert = builder.show();
+                AlertDialog alert = builder.show();
 
 
-
-
-        }
-    });
+            }
+        });
         listview();
-}
-    public void restartApp (){
+    }
+
+    public void restartApp() {
         Intent i = new Intent(getApplicationContext(), Einkaufswagen.class);
         startActivity(i);
-        finish();}
+        finish();
+    }
 
-private void listview(){
+    private void listview() {
 
-    Log.d("list", "hallo");
+        Log.d("list", "hallo");
 
-mAdapter = new ListAdapter();
-    einkauf.setAdapter(mAdapter);
+        mAdapter = new ListAdapter();
+        einkauf.setAdapter(mAdapter);
 
 
-}
+    }
 
     public class ListAdapter extends BaseAdapter {
         private static final String TAG = "FirebaseListAdapter";
@@ -116,23 +157,24 @@ mAdapter = new ListAdapter();
 
         List<String> namen = Collections.EMPTY_LIST;
         List<String> mengen = Collections.EMPTY_LIST;
+
         public ListAdapter() {
             ref.addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                     namen = new ArrayList<>();
-                     mengen = new ArrayList<>();
-                   for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    namen = new ArrayList<>();
+                    mengen = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                       namen.add(child.getKey());
+                        namen.add(child.getKey());
 
-                      mengen.add(
-                              String.valueOf(((HashMap<String,Long>)child.getValue()).get("Menge"))
-                      );
-                       Log.d("line", child.getKey());
-                   }
-                   notifyDataSetChanged();
+                        mengen.add(
+                                String.valueOf(((HashMap<String, Long>) child.getValue()).get("Menge"))
+                        );
+                        Log.d("line", child.getKey());
+                    }
+                    notifyDataSetChanged();
 
                 }
 
@@ -173,21 +215,22 @@ mAdapter = new ListAdapter();
             }
 
             String model = getItem(position);
-            ((TextView)convertView.findViewById(R.id.tvname)).setText(namen.get(position));
-           ((TextView)convertView.findViewById(R.id.tvmenge)).setText(mengen.get(position));
-
+            ((TextView) convertView.findViewById(R.id.tvname)).setText(namen.get(position));
+            ((TextView) convertView.findViewById(R.id.tvmenge)).setText(mengen.get(position));
 
 
             return convertView;
         }
     }
-public class Eintrag{
+
+    public class Eintrag {
         public String Name;
         public Long Menge;
-        public Eintrag(String name, Long menge){
+
+        public Eintrag(String name, Long menge) {
             this.Name = name;
             this.Menge = menge;
         }
-}
+    }
 }
 
