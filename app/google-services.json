@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "53701003849",
+    "firebase_url": "https://appfall-id.firebaseio.com",
+    "project_id": "appfall-id",
+    "storage_bucket": "appfall-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53701003849:android:46d22c0551171cae",
+        "android_client_info": {
+          "package_name": "com.thinkpaduser.appfall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53701003849-6cp9jcc66aqk9rcirfvfebuomapn16gf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thinkpaduser.appfall",
+            "certificate_hash": "1f3210299ab732a081acf83e6aa596f7ef96461a"
+          }
+        },
+        {
+          "client_id": "53701003849-6eles8sfus49n5jeveivnhblnl0jijf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLOeX4r2p6_V_JzJBDX4TaPubqkP7xpho"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53701003849-6eles8sfus49n5jeveivnhblnl0jijf1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53701003849-k5lhstv27fc7v0p9nrnml7m5gs3trmvb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.adrianbaumgart.AppFall"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
