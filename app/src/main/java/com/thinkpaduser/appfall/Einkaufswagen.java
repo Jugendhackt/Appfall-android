@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.common.ChangeEventType;
 
@@ -47,6 +48,34 @@ public class Einkaufswagen extends AppCompatActivity {
     private ListAdapter mAdapter;
     private Button einkaufen;
     private Button beendet;
+    private View.OnClickListener addlistener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Einkaufswagen.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
+            final EditText etname = (EditText) view.findViewById(R.id.etproduktname);
+            final EditText etmenge = (EditText) view.findViewById(R.id.etmenge);
+
+
+            builder.setTitle("Hinzufügen")
+                    .setView(view)
+                    . setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            ref.child(etname.getText().toString()).setValue(new Eintrag(etname.getText().toString(), Long.valueOf(etmenge.getText().toString())));
+
+
+                        }
+                    })
+                    .setCancelable(true);
+
+            AlertDialog alert = builder.show();
+
+
+        }
+    };
 
 
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("list");
@@ -68,14 +97,22 @@ public class Einkaufswagen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (((Long) dataSnapshot.getValue()) == 1) {
-                    addItem.setEnabled(false);
+                  addItem.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          Toast.makeText(Einkaufswagen.this, "Es ist gerade jemand einkaufen", Toast.LENGTH_SHORT).show();
+                      }
+                  });
                     einkaufen.setText("gerade einkaufen");
                 } else {
-                    if (((Long) dataSnapshot.getValue()) == 0){
-                    addItem.setEnabled(true);
-                    einkaufen.setText("Einkaufen");}
+
+
+                    einkaufen.setText("Einkaufen");
+                    addItem.setOnClickListener(addlistener);
                 }
             }
+
+
 
 
             @Override
@@ -103,34 +140,7 @@ public class Einkaufswagen extends AppCompatActivity {
                 ein.setValue(0);
             }
         });
-        addItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Einkaufswagen.this);
-                LayoutInflater inflater = getLayoutInflater();
-                View view = inflater.inflate(R.layout.dialog_view_add_item, null, false);
-                final EditText etname = (EditText) view.findViewById(R.id.etproduktname);
-                final EditText etmenge = (EditText) view.findViewById(R.id.etmenge);
-
-
-                builder.setTitle("Hinzufügen")
-                        .setView(view)
-                        . setPositiveButton("Fertig", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                ref.child(etname.getText().toString()).setValue(new Eintrag(etname.getText().toString(), Long.valueOf(etmenge.getText().toString())));
-
-
-                            }
-                        })
-                        .setCancelable(true);
-
-                AlertDialog alert = builder.show();
-
-
-            }
-        });
+        //addItem.setOnClickListener(
         listview();
     }
 
@@ -232,5 +242,8 @@ public class Einkaufswagen extends AppCompatActivity {
             this.Menge = menge;
         }
     }
-}
+
+    }
+
+
 
