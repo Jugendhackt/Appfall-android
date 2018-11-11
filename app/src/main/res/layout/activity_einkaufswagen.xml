@@ -17,7 +17,8 @@
         android:gravity="end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:tint="#FFFFFF"/>
 
 
     <LinearLayout
@@ -67,7 +68,7 @@
 
     </ListView>
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/btnEinkaufen"
         style="@android:style/Widget.DeviceDefault.Button.Borderless"
         android:layout_width="wrap_content"
@@ -78,11 +79,13 @@
         android:textColor="#ffffff"
         android:text="Einkaufen"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="8dp"/>
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/btnBeendet"
         style="@android:style/Widget.DeviceDefault.Button.Borderless"
+        android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

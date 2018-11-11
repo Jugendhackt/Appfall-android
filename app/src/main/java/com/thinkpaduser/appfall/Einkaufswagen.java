@@ -101,11 +101,14 @@ public class Einkaufswagen extends AppCompatActivity {
                       @Override
                       public void onClick(View v) {
                           Toast.makeText(Einkaufswagen.this, "Es ist gerade jemand einkaufen", Toast.LENGTH_SHORT).show();
+
+
                       }
                   });
+                    einkaufen.setEnabled(false);
                     einkaufen.setText("gerade einkaufen");
                 } else {
-
+einkaufen.setEnabled(true);
 
                     einkaufen.setText("Einkaufen");
                     addItem.setOnClickListener(addlistener);
