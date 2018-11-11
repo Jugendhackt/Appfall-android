@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,8 @@ public class Einkaufswagen extends AppCompatActivity {
     private ListAdapter mAdapter;
     private Button einkaufen;
     private Button beendet;
+    private View div;
+    private View div2;
     private View.OnClickListener addlistener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -87,10 +90,11 @@ public class Einkaufswagen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_einkaufswagen);
 
-
+div = (View) findViewById(R.id.divider2);
         einkaufen = (Button) findViewById(R.id.btnEinkaufen);
         addItem = (FloatingActionButton) findViewById(R.id.btnadditem);
         einkauf = (ListView) findViewById(R.id.lvEinkauf);
+        div2 = (View) findViewById(R.id.divider);
         beendet = (Button) findViewById(R.id.btnBeendet);
         beendet.setEnabled(false);
         ein.addValueEventListener(new ValueEventListener() {
@@ -142,8 +146,12 @@ einkaufen.setEnabled(true);
                 einkaufen.setText("Einkaufen");
                 ein.setValue(0);
                 ref.removeValue();
+                div.setVisibility(View.INVISIBLE);
+                div2.setVisibility(View.INVISIBLE);
+
             }
         });
+
         //addItem.setOnClickListener(
         listview();
     }
@@ -179,6 +187,10 @@ einkaufen.setEnabled(true);
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     namen = new ArrayList<>();
                     mengen = new ArrayList<>();
+                    if (namen.isEmpty()){
+                        div.setVisibility(View.INVISIBLE);
+                        div2.setVisibility(View.INVISIBLE);
+                    }
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
 
                         namen.add(child.getKey());
@@ -200,6 +212,7 @@ einkaufen.setEnabled(true);
 
 
         }
+
 
 
         @NonNull
@@ -226,6 +239,9 @@ einkaufen.setEnabled(true);
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listviewitems, parent, false);
+                div.setVisibility(View.VISIBLE);
+                div2.setVisibility(View.VISIBLE);
+
             }
 
             String model = getItem(position);
